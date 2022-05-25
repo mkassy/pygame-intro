@@ -28,9 +28,6 @@ def collisions(player,obstacles):
             if player.colliderect(obstacle_rect): return False
     return True
 
-
-
-
 pygame.init()
 screen = pygame.display.set_mode((800,500))
 # screen_rect = screen.get_rect()
@@ -58,7 +55,7 @@ obstacle_rect_list = []
 
 player_surf = pygame.image.load('graphics/cute_bunny.png').convert_alpha()
 player_surf = pygame.transform.rotozoom(player_surf,0,0.15)
-player_rect = player_surf.get_rect(midbottom = (40,400))
+player_rect = player_surf.get_rect(midbottom = (80,400))
 player_gravity = 0
 
 # Intro screen
@@ -141,7 +138,9 @@ while True:
     else:
         screen.fill((94,129,162))
         screen.blit(player_stand,player_stand_rect)
-        obstacle_rect_list.clear()
+        obstacle_rect_list.clear() # clears obstacles after game is done
+        player_rect.midbottom = (80,400) # restarts player position
+        player_gravity = 0 # restarts gravity at 0
 
         score_message = game_message_font.render(f"Your score is: {score}",False,(111,196,169))
         score_message_rect = score_message.get_rect(center = (400,420))
