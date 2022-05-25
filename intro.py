@@ -48,6 +48,9 @@ press_key_font = pygame.font.Font('pixeltype/Pixeltype.ttf', 25)
 press_key = press_key_font.render('Press space to continue.', False, 'orange')
 press_key_rect = press_key.get_rect(center = (400,450))
 
+# Timer
+obstacle_timer = pygame.USEREVENT + 1 # always add plus 1 
+pygame.time.set_timer(obstacle_timer,900) # 2 arguments (what event you want to trigger, how many ms)
 
 while True:
     for event in pygame.event.get():
@@ -69,6 +72,9 @@ while True:
                 snail_rect.left = 800
                 player_rect.right = 0
                 start_time = int(pygame.time.get_ticks() / 1000)
+
+        if event.type == obstacle_timer and game_active:
+            print('test')
 
     if game_active:
         # draw all our elements   
