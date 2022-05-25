@@ -14,7 +14,8 @@ def obstacle_movement(obstacle_list):
         for obstacle_rect in obstacle_list:
             obstacle_rect.x -= 5
 
-            screen.blit(snail_surf,obstacle_rect)
+            if obstacle_rect.bottom == 400: screen.blit(snail_surf,obstacle_rect)
+            else: screen.blit(bee_surf,obstacle_rect)
 
         obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
 
@@ -41,7 +42,8 @@ soil_surf = pygame.image.load('graphics/soil.jpg').convert() # convert makes gam
 
 # Obstacles
 snail_surf = pygame.image.load('graphics/snail.png').convert_alpha()
-snail_rect = snail_surf.get_rect(bottomright = (800,400))
+bee_surf = pygame.image.load('graphics/angry_bee.png').convert_alpha()
+bee_surf = pygame.transform.rotozoom(bee_surf,0,0.1)
 
 obstacle_rect_list = []
 
@@ -88,12 +90,14 @@ while True:
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
-                snail_rect.left = 800
                 player_rect.right = 0
                 start_time = int(pygame.time.get_ticks() / 1000)
 
         if event.type == obstacle_timer and game_active:
-            obstacle_rect_list.append(snail_surf.get_rect(bottomright = (randint(800,1200),400)))
+            if randint(0,2):
+                obstacle_rect_list.append(snail_surf.get_rect(bottomright = (randint(800,1200),400)))
+            else:
+                obstacle_rect_list.append(bee_surf.get_rect(bottomright = (randint(800,1200),310)))
 
     if game_active:
         # draw all our elements   
@@ -124,8 +128,8 @@ while True:
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         # collision
-        if snail_rect.colliderect(player_rect):
-            game_active = False
+        # if snail_rect.colliderect(player_rect):
+        #     game_active = False
     else:
         screen.fill((94,129,162))
         screen.blit(player_stand,player_stand_rect)
@@ -150,4 +154,6 @@ while True:
 
 
 # Bunny Image Source: https://www.pngitem.com/middle/ohxhiT_rabbit-cartoon-png-bunny-cartoon-png-transparent-png/
-
+# Bee Image Source: https://www.pngitem.com/middle/JTTTJb_bee-555px-bumble-bee-animation-hd-png-download/
+# Bee Image Source: https://www.pngitem.com/middle/hmRwhRi_teaching-and-learning-resources-honey-bee-animated-png/
+# Bee Image Source: https://www.pngitem.com/middle/JTThii_cute-bee-png-cute-bee-clipart-transparent-png/
