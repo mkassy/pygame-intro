@@ -35,8 +35,8 @@ score = 0
 
 # Loading background images 
 sky_surf = pygame.image.load('graphics/sky.png').convert() # convert alpha removes alpha values
-soil_surf = pygame.image.load('graphics/soil.jpg').convert() # convert makes game run faster
-
+ground_surf = pygame.image.load('graphics/ground3.png').convert() # convert makes game run faster
+ground_surf = pygame.transform.scale(ground_surf, (1000,100))
 # score_surf = test_font.render('My game', False, (64,64,64)) # test, AA, color(RGB or hex_color)
 # score_rect = score_surf.get_rect(center = (400,50))
 
@@ -95,14 +95,14 @@ while True:
 
         if event.type == obstacle_timer and game_active:
             if randint(0,2):
-                obstacle_rect_list.append(snail_surf.get_rect(bottomright = (randint(800,1200),400)))
+                obstacle_rect_list.append(snail_surf.get_rect(bottomright = (randint(900,1200),400)))
             else:
-                obstacle_rect_list.append(bee_surf.get_rect(bottomright = (randint(800,1200),310)))
+                obstacle_rect_list.append(bee_surf.get_rect(bottomright = (randint(900,1200),310)))
 
     if game_active:
         # draw all our elements   
         screen.blit(sky_surf, (0,0))
-        screen.blit(soil_surf, (0,400))
+        screen.blit(ground_surf, (0,400))
         # pygame.draw.rect(screen,'#c0e8ec', score_rect) # takes 3+ arguments
         # pygame.draw.rect(screen, '#c0e8ec', score_rect, 10) # 4th arg is line width, 5th is border rounding
         # pygame.draw.line(screen, 'gold', (0,0), pygame.mouse.get_pos(), width=5)
@@ -152,8 +152,10 @@ while True:
 
 
 
-
+# Background Image Source: https://www.freevector.com/mountain-and-sky-landscape-18616
+# Ground Image Source: https://gallery.yopriceville.com/Free-Clipart-Pictures/Grass-Grounds-Coverings-PNG-Clipart/Ground_PNG_Clip_Art_Image#.Yo5iBGDMKJE
 # Bunny Image Source: https://www.pngitem.com/middle/ohxhiT_rabbit-cartoon-png-bunny-cartoon-png-transparent-png/
 # Bee Image Source: https://www.pngitem.com/middle/JTTTJb_bee-555px-bumble-bee-animation-hd-png-download/
 # Bee Image Source: https://www.pngitem.com/middle/hmRwhRi_teaching-and-learning-resources-honey-bee-animated-png/
 # Bee Image Source: https://www.pngitem.com/middle/JTThii_cute-bee-png-cute-bee-clipart-transparent-png/
+# Snail Image Source: https://www.pngitem.com/middle/wJiToo_cartoon-snail-public-domain-image-hd-photo-clipart/
