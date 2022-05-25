@@ -1,5 +1,6 @@
 import pygame
 from sys import exit
+from random import randint
 
 def display_score():
     current_time = int(pygame.time.get_ticks() / 1000) - start_time # gets time in milliseconds
@@ -7,6 +8,19 @@ def display_score():
     score_rect = score_surf.get_rect(center = (400,50))
     screen.blit(score_surf,score_rect) # surface, and then pos
     return current_time
+
+def obstacle_movement(obstacle_list):
+    if obstacle_list:
+        for obstacle_rect in obstacle_list:
+            obstacle_rect.x -= 5
+
+            screen.blit(snail_surf,obstacle_rect)
+
+        obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
+
+        return obstacle_list
+    else: return []
+
 
 pygame.init()
 screen = pygame.display.set_mode((800,500))
@@ -18,17 +32,22 @@ game_active = False
 start_time = 0
 score = 0
 
+# Loading background images 
 sky_surf = pygame.image.load('graphics/sky.png').convert() # convert alpha removes alpha values
 soil_surf = pygame.image.load('graphics/soil.jpg').convert() # convert makes game run faster
 
 # score_surf = test_font.render('My game', False, (64,64,64)) # test, AA, color(RGB or hex_color)
 # score_rect = score_surf.get_rect(center = (400,50))
 
+# Obstacles
 snail_surf = pygame.image.load('graphics/snail.png').convert_alpha()
 snail_rect = snail_surf.get_rect(bottomright = (800,400))
 
+obstacle_rect_list = []
+
+
 player_surf = pygame.image.load('graphics/cute_bunny.png').convert_alpha()
-player_surf = pygame.transform.rotozoom(player_surf,0,0.1)
+player_surf = pygame.transform.rotozoom(player_surf,0,0.15)
 player_rect = player_surf.get_rect(midbottom = (40,400))
 player_gravity = 0
 
@@ -50,7 +69,7 @@ press_key_rect = press_key.get_rect(center = (400,450))
 
 # Timer
 obstacle_timer = pygame.USEREVENT + 1 # always add plus 1 
-pygame.time.set_timer(obstacle_timer,900) # 2 arguments (what event you want to trigger, how many ms)
+pygame.time.set_timer(obstacle_timer,1500) # 2 arguments (what event you want to trigger, how many ms)
 
 while True:
     for event in pygame.event.get():
@@ -74,7 +93,7 @@ while True:
                 start_time = int(pygame.time.get_ticks() / 1000)
 
         if event.type == obstacle_timer and game_active:
-            print('test')
+            obstacle_rect_list.append(snail_surf.get_rect(bottomright = (randint(800,1200),400)))
 
     if game_active:
         # draw all our elements   
@@ -88,17 +107,21 @@ while True:
         # screen.blit(score_surf, score_rect)
         score = display_score()
 
-        snail_rect.x -= 4
-        if snail_rect.right <= -100: snail_rect.left = 800
-        screen.blit(snail_surf, snail_rect)
+        # Snail
+        # snail_rect.x -= 4
+        # if snail_rect.right <= -100: snail_rect.left = 800
+        # screen.blit(snail_surf, snail_rect)
 
         # Player
         player_gravity += 1
         player_rect.y += player_gravity
         if player_rect.bottom >= 400: player_rect.bottom = 400
-        player_rect.left += 2
-        if player_rect.left > 800: player_rect.right = 40
+        player_rect.left = 10
+        # if player_rect.left > 800: player_rect.right = 40
         screen.blit(player_surf,player_rect)
+
+        # Obstacle movement
+        obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         # collision
         if snail_rect.colliderect(player_rect):
