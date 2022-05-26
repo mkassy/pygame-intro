@@ -28,6 +28,19 @@ def collisions(player,obstacles):
             if player.colliderect(obstacle_rect): return False
     return True
 
+def player_animation():
+    global player_surf, player_index
+
+    if player_rect.bottom < 400: 
+        player_surf = player_jump
+    else:
+        player_index += 0.1
+        if player_index >= len(player_walk): player_index = 0
+        player_surf = player_walk[int(player_index)]
+        # walk
+    # play walking animation if the player is on the floor
+    # display the jump surface when the player is not on the floor
+
 pygame.init()
 screen = pygame.display.set_mode((800,500))
 # screen_rect = screen.get_rect()
@@ -53,13 +66,21 @@ bee_surf = pygame.transform.rotozoom(bee_surf,0,0.1)
 obstacle_rect_list = []
 
 
-player_surf = pygame.image.load('graphics/cute_bunny.png').convert_alpha()
-player_surf = pygame.transform.rotozoom(player_surf,0,0.15)
+player_walk_1 = pygame.image.load('graphics/png/cat/Walk (1).png').convert_alpha()
+player_walk_1 = pygame.transform.rotozoom(player_walk_1,0,0.15)
+player_walk_2 = pygame.image.load('graphics/png/cat/Walk (2).png').convert_alpha()
+player_walk_2 = pygame.transform.rotozoom(player_walk_2,0,0.15)
+player_walk = [player_walk_1, player_walk_2]
+player_index = 0
+player_jump = pygame.image.load('graphics/png/cat/Jump (8).png').convert_alpha()
+player_jump = pygame.transform.rotozoom(player_jump,0,0.15)
+
+player_surf = player_walk[player_index]
 player_rect = player_surf.get_rect(midbottom = (80,400))
 player_gravity = 0
 
 # Intro screen
-player_stand = pygame.image.load('graphics/cute_bunny.png').convert_alpha()
+player_stand = pygame.image.load('graphics/png/cat/Walk (1).png').convert_alpha()
 player_stand = pygame.transform.rotozoom(player_stand,0,0.5)
 player_stand_rect = player_stand.get_rect(center = (400, 250))
 
@@ -76,7 +97,7 @@ press_key_rect = press_key.get_rect(center = (400,450))
 
 # Timer
 obstacle_timer = pygame.USEREVENT + 1 # always add plus 1 
-pygame.time.set_timer(obstacle_timer,1500) # 2 arguments (what event you want to trigger, how many ms)
+pygame.time.set_timer(obstacle_timer,1600) # 2 arguments (what event you want to trigger, how many ms)
 
 while True:
     for event in pygame.event.get():
@@ -95,7 +116,7 @@ while True:
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
-                player_rect.right = 0
+                
                 start_time = int(pygame.time.get_ticks() / 1000)
 
         if event.type == obstacle_timer and game_active:
@@ -125,8 +146,7 @@ while True:
         player_gravity += 1
         player_rect.y += player_gravity
         if player_rect.bottom >= 400: player_rect.bottom = 400
-        player_rect.left = 10
-        # if player_rect.left > 800: player_rect.right = 40
+        player_animation()
         screen.blit(player_surf,player_rect)
 
         # Obstacle movement
