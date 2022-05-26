@@ -1,3 +1,4 @@
+from turtle import end_fill
 import pygame
 from sys import exit
 from random import randint
@@ -15,7 +16,7 @@ def obstacle_movement(obstacle_list):
             obstacle_rect.x -= 5
 
             if obstacle_rect.bottom == 400: screen.blit(snail_surf,obstacle_rect)
-            else: screen.blit(bee_surf,obstacle_rect)
+            else: screen.blit(bird_surf,obstacle_rect)
 
         obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
 
@@ -59,16 +60,29 @@ ground_surf = pygame.transform.scale(ground_surf, (1000,100))
 # score_rect = score_surf.get_rect(center = (400,50))
 
 # Obstacles
+
+# Snail
 snail_surf = pygame.image.load('graphics/snail.png').convert_alpha()
-bee_surf = pygame.image.load('graphics/angry_bee.png').convert_alpha()
-bee_surf = pygame.transform.rotozoom(bee_surf,0,0.1)
+
+# Bird
+bird_fly_1 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
+bird_fly_2 = pygame.image.load('graphics/fly/fly2.png').convert_alpha()
+bird_fly_1 = pygame.transform.rotozoom(bird_fly_1,0,0.1)
+bird_fly_2 = pygame.transform.rotozoom(bird_fly_2,0,0.1)
+bird_fly_1 = pygame.transform.flip(bird_fly_1,True,False)
+bird_fly_2 = pygame.transform.flip(bird_fly_2,True,False)
+
+bird_frames = [bird_fly_1, bird_fly_2]
+
+bird_frame_index = 0
+bird_surf = bird_frames[bird_frame_index]
 
 obstacle_rect_list = []
 
 
 player_walk_1 = pygame.image.load('graphics/png/cat/Walk (1).png').convert_alpha()
-player_walk_1 = pygame.transform.rotozoom(player_walk_1,0,0.15)
 player_walk_2 = pygame.image.load('graphics/png/cat/Walk (2).png').convert_alpha()
+player_walk_1 = pygame.transform.rotozoom(player_walk_1,0,0.15)
 player_walk_2 = pygame.transform.rotozoom(player_walk_2,0,0.15)
 player_walk = [player_walk_1, player_walk_2]
 player_index = 0
@@ -99,6 +113,10 @@ press_key_rect = press_key.get_rect(center = (400,450))
 obstacle_timer = pygame.USEREVENT + 1 # always add plus 1 
 pygame.time.set_timer(obstacle_timer,1600) # 2 arguments (what event you want to trigger, how many ms)
 
+bird_animation_timer = pygame.USEREVENT + 2
+pygame.time.set_timer(bird_animation_timer,300)
+
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -119,11 +137,18 @@ while True:
                 
                 start_time = int(pygame.time.get_ticks() / 1000)
 
-        if event.type == obstacle_timer and game_active:
-            if randint(0,2):
-                obstacle_rect_list.append(snail_surf.get_rect(bottomright = (randint(900,1200),400)))
-            else:
-                obstacle_rect_list.append(bee_surf.get_rect(bottomright = (randint(900,1200),310)))
+        if game_active:
+            if event.type == obstacle_timer:
+                if randint(0,2):
+                    obstacle_rect_list.append(snail_surf.get_rect(bottomright = (randint(900,1200),400)))
+                else:
+                    obstacle_rect_list.append(bird_surf.get_rect(bottomright = (randint(900,1200),310)))
+
+            if event.type == bird_animation_timer:
+                if bird_frame_index == 0: bird_frame_index = 1
+                else: bird_frame_index = 0
+                bird_surf = bird_frames[bird_frame_index]
+
 
     if game_active:
         # draw all our elements   
