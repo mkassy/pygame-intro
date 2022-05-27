@@ -67,12 +67,19 @@ snail_surf = pygame.image.load('graphics/snail.png').convert_alpha()
 # Bird
 bird_fly_1 = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
 bird_fly_2 = pygame.image.load('graphics/fly/fly2.png').convert_alpha()
-bird_fly_1 = pygame.transform.rotozoom(bird_fly_1,0,0.1)
-bird_fly_2 = pygame.transform.rotozoom(bird_fly_2,0,0.1)
-bird_fly_1 = pygame.transform.flip(bird_fly_1,True,False)
-bird_fly_2 = pygame.transform.flip(bird_fly_2,True,False)
+# bird_fly_1 = pygame.transform.rotozoom(bird_fly_1,0,0.1)
+# bird_fly_2 = pygame.transform.rotozoom(bird_fly_2,0,0.1)
+# bird_fly_1 = pygame.transform.flip(bird_fly_1,True,False)
+# bird_fly_2 = pygame.transform.flip(bird_fly_2,True,False)
 
-bird_frames = [bird_fly_1, bird_fly_2]
+bird_list = [bird_fly_1, bird_fly_2]
+bird_frames = []
+
+for frame in bird_list:
+    frame = pygame.transform.rotozoom(frame,0,0.1)
+    frame = pygame.transform.flip(frame,True,False)
+    bird_frames.append(frame)
+
 
 bird_frame_index = 0
 bird_surf = bird_frames[bird_frame_index]
@@ -170,6 +177,8 @@ while True:
         # Player
         player_gravity += 1
         player_rect.y += player_gravity
+        # player_rect.x += 1
+        # if player_rect.left >= 800: player_rect.right = 0 
         if player_rect.bottom >= 400: player_rect.bottom = 400
         player_animation()
         screen.blit(player_surf,player_rect)
