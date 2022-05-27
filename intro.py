@@ -101,11 +101,11 @@ player_rect = player_surf.get_rect(midbottom = (80,400))
 player_gravity = 0
 
 # Intro screen
-player_stand = pygame.image.load('graphics/png/cat/Walk (1).png').convert_alpha()
+player_stand = pygame.image.load('graphics/png/cat/Run (7).png').convert_alpha()
 player_stand = pygame.transform.rotozoom(player_stand,0,0.5)
 player_stand_rect = player_stand.get_rect(center = (400, 250))
 
-game_name = test_font.render('Bunny Hopper',False,(111,196,169))
+game_name = test_font.render("Leo's Fun Adventure!",False,(111,196,169))
 game_name_rect = game_name.get_rect(center = (400,80))
 
 game_message_font = pygame.font.Font('pixeltype/Pixeltype.ttf', 35)
@@ -209,8 +209,6 @@ while True:
     # update everything
     pygame.display.update()
     clock.tick(60) # 60 frames per sec 
-
-
 
 
 
